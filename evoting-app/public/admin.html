@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | E-Vote</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --green-dark: #1a4d1f;
+            --green-deep: #0f2e13;
+            --green-mid: #2e7d32;
+            --green-blob: #236b28;
+            --green-light: #c8e6c9;
+            --white: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --card-bg: rgba(255, 255, 255, 0.06);
+            --card-border: rgba(255, 255, 255, 0.11);
+            --amber: #bf8c30;
+            --teal: #00796b;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--green-deep);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            width: 550px;
+            height: 550px;
+            background: var(--green-blob);
+            top: -160px;
+            right: -130px;
+            border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── NAVBAR ── */
+        .top-nav {
+            background: rgba(10, 22, 12, 0.88);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            padding: 1rem 0;
+            position: relative;
+            z-index: 100;
+        }
+
+        .brand-name {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.15rem;
+        }
+
+        .brand-mark {
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 7px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-right: 6px;
+        }
+
+        .admin-pill {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: rgba(255, 193, 7, 0.12);
+            border: 1px solid rgba(255, 193, 7, 0.25);
+            color: #ffd54f;
+            border-radius: 100px;
+            padding: 0.2rem 0.7rem;
+        }
+
+        .btn-nav {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.78rem;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 100px;
+            padding: 0.35rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--white);
+        }
+
+        /* ── LAYOUT ── */
+        main {
+            position: relative;
+            z-index: 1;
+            padding: 2rem 0 5rem;
+        }
+
+        /* ── SECTION LABEL ── */
+        .section-label {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #81c784;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .section-heading {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -0.3px;
+        }
+
+        /* ── STAT CARDS ── */
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.4rem;
+            backdrop-filter: blur(8px);
+            height: 100%;
+        }
+
+        .stat-label {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 2.2rem;
+            line-height: 1;
+            margin: 0.4rem 0 0.2rem;
+        }
+
+        .stat-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* ── ELECTION STATUS CARD ── */
+        .election-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.8rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .status-open {
+            background: rgba(76, 175, 80, 0.15);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #a5d6a7;
+            border-radius: 100px;
+            padding: 0.3rem 0.9rem;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-closed {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            border-radius: 100px;
+            padding: 0.3rem 0.9rem;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── BUTTONS ── */
+        .btn-toggle-open {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.82rem;
+            background: var(--green-mid);
+            color: var(--white);
+            border: none;
+            border-radius: 100px;
+            padding: 0.6rem 1.4rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-toggle-open:hover {
+            background: #388e3c;
+            transform: translateY(-1px);
+        }
+
+        .btn-toggle-close {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.82rem;
+            background: rgba(239, 68, 68, 0.8);
+            color: var(--white);
+            border: none;
+            border-radius: 100px;
+            padding: 0.6rem 1.4rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-toggle-close:hover {
+            background: #ef4444;
+            transform: translateY(-1px);
+        }
+
+        .btn-export {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.82rem;
+            background: rgba(191, 140, 48, 0.85);
+            color: var(--white);
+            border: none;
+            border-radius: 100px;
+            padding: 0.6rem 1.4rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-export:hover {
+            background: var(--amber);
+            color: var(--white);
+            transform: translateY(-1px);
+        }
+
+        .btn-reset {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.82rem;
+            background: transparent;
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 100px;
+            padding: 0.6rem 1.4rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-reset:hover {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        /* ── RESULTS BARS ── */
+        .results-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.8rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .progress-bar-track {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.6s ease;
+        }
+
+        .fill-teal {
+            background: linear-gradient(90deg, #00796b, #4db6ac);
+        }
+
+        .fill-amber {
+            background: linear-gradient(90deg, #bf8c30, #ffe082);
+        }
+
+        .candidate-result-name {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        /* ── VOTERS TABLE ── */
+        .table-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.8rem;
+            backdrop-filter: blur(8px);
+            overflow: hidden;
+        }
+
+        .search-input {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            color: var(--white);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            padding: 0.55rem 1rem;
+            width: 240px;
+            transition: border-color 0.2s;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(76, 175, 80, 0.5);
+        }
+
+        .voters-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        .voters-table th {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 0.6rem 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .voters-table td {
+            padding: 0.75rem 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.8);
+            vertical-align: middle;
+        }
+
+        .voters-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .voters-table tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .voted-yes {
+            background: rgba(76, 175, 80, 0.15);
+            color: #a5d6a7;
+            border: 1px solid rgba(76, 175, 80, 0.25);
+            border-radius: 100px;
+            padding: 0.15rem 0.65rem;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .voted-no {
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 0.15rem 0.65rem;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .btn-delete-voter {
+            background: transparent;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #fca5a5;
+            border-radius: 6px;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.72rem;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-delete-voter:hover {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        /* ── TOAST ── */
+        .toast-box {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(15, 46, 19, 0.95);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: var(--white);
+            border-radius: 12px;
+            padding: 1rem 1.4rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 9999;
+            backdrop-filter: blur(12px);
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            max-width: 320px;
+        }
+
+        .toast-box.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-box.error {
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        /* ── CONFIRM MODAL ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #1a4d1f;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 380px;
+            animation: fadeUp 0.3s ease forwards;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-box h5 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-box p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .btn-confirm-danger {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            background: #ef4444;
+            color: var(--white);
+            border: none;
+            border-radius: 100px;
+            padding: 0.6rem 1.4rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-confirm-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-cancel {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 100px;
+            padding: 0.6rem 1.4rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: var(--white);
+        }
+
+        /* ── FADE UP ── */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(18px);
+            animation: fadeUp 0.55s forwards ease-out;
+        }
+
+        .d1 {
+            animation-delay: 0.05s;
+        }
+
+        .d2 {
+            animation-delay: 0.13s;
+        }
+
+        .d3 {
+            animation-delay: 0.21s;
+        }
+
+        .d4 {
+            animation-delay: 0.29s;
+        }
+
+        .d5 {
+            animation-delay: 0.37s;
+        }
+
+        .d6 {
+            animation-delay: 0.45s;
+        }
+
+        @media (max-width: 768px) {
+            .search-input {
+                width: 100%;
+            }
+
+            .voters-table {
+                font-size: 0.78rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="top-nav">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <span class="brand-name"><span class="brand-mark">E</span>-Vote</span>
+                <span class="admin-pill">⚙ Admin</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <a href="/results.html" class="btn-nav">Public Results</a>
+                <button class="btn-nav" onclick="adminLogout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <!-- PAGE HEADER -->
+        <div class="d-flex justify-content-between align-items-end mb-4 fade-up d1">
+            <div>
+                <span class="section-label">Control panel</span>
+                <h2 class="section-heading">Admin Dashboard</h2>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <a id="exportBtn" href="#" class="btn-export" onclick="exportCSV(event)">⬇ Export CSV</a>
+                <button class="btn-reset" onclick="confirmReset()">⚠ Reset Votes</button>
+            </div>
+        </div>
+
+        <!-- STAT CARDS -->
+        <div class="row g-3 mb-4 fade-up d2">
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <span class="stat-label">Registered</span>
+                    <div class="stat-value" id="statRegistered">—</div>
+                    <span class="stat-sub">total voters</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <span class="stat-label">Voted</span>
+                    <div class="stat-value" id="statVoted">—</div>
+                    <span class="stat-sub">cast ballots</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <span class="stat-label">Not Voted</span>
+                    <div class="stat-value" id="statNotVoted">—</div>
+                    <span class="stat-sub">pending voters</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <span class="stat-label">Turnout</span>
+                    <div class="stat-value" id="statTurnout">—</div>
+                    <span class="stat-sub">voter turnout</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+
+            <!-- ELECTION CONTROL -->
+            <div class="col-lg-5 fade-up d3">
+                <div class="election-card h-100">
+                    <span class="section-label">Election control</span>
+                    <h4 class="section-heading mb-3">Election Status</h4>
+
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <span id="electionStatusBadge" class="status-open">Open</span>
+                        <span id="electionStatusText"
+                            style="font-size:0.85rem; color:var(--text-muted); font-weight:300;">
+                            Voters can currently submit ballots.
+                        </span>
+                    </div>
+
+                    <button id="toggleElectionBtn" class="btn-toggle-close" onclick="toggleElection()">
+                        Close Election
+                    </button>
+                </div>
+            </div>
+
+            <!-- LIVE RESULTS -->
+            <div class="col-lg-7 fade-up d4">
+                <div class="results-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <span class="section-label">Live results</span>
+                            <h4 class="section-heading">Vote Count</h4>
+                        </div>
+                        <span
+                            style="font-family:'Syne',sans-serif; font-size:0.72rem; font-weight:700; color:var(--text-muted);">2026</span>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="candidate-result-name">Ini</span>
+                            <span style="font-size:0.82rem; color:var(--text-muted);"><span id="iniVotes">0</span>
+                                votes</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill fill-teal" id="progressIni" style="width:0%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="candidate-result-name">Tinubu</span>
+                            <span style="font-size:0.82rem; color:var(--text-muted);"><span id="tinubuVotes">0</span>
+                                votes</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill fill-amber" id="progressTinubu" style="width:0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VOTERS TABLE -->
+        <div class="table-card fade-up d5">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-2">
+                <div>
+                    <span class="section-label">Voter registry</span>
+                    <h4 class="section-heading">All Voters</h4>
+                </div>
+                <input type="text" class="search-input" placeholder="Search by name, email, ID..."
+                    oninput="filterTable(this.value)" />
+            </div>
+
+            <div style="overflow-x:auto;">
+                <table class="voters-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Voter ID</th>
+                            <th>National ID</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="votersTableBody">
+                        <tr>
+                            <td colspan="7" style="text-align:center; color:var(--text-muted); padding:2rem;">
+                                Loading voters...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- CONFIRM MODAL -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-box">
+            <h5 id="modalTitle">Reset all votes?</h5>
+            <p id="modalDesc">This will permanently delete all recorded votes and reset every voter's status. This
+                cannot be undone.</p>
+            <div class="d-flex gap-2">
+                <button class="btn-confirm-danger" id="modalConfirmBtn">Yes, proceed</button>
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast-box" id="toastBox"></div>
+
+    <script>
+        const token = localStorage.getItem("adminToken");
+
+        // Guard — redirect if not logged in
+        if (!token) window.location.href = "/admin-login.html";
+
+        const headers = {
+            "Content-Type": "application/json",
+            "x-admin-token": token,
+        };
+
+        let allVoters = [];
+        let currentElectionOpen = true;
+        let pendingAction = null;
+
+        // ── TOAST ──
+        function showToast(msg, isError = false) {
+            const box = document.getElementById("toastBox");
+            box.textContent = msg;
+            box.classList.toggle("error", isError);
+            box.classList.add("show");
+            setTimeout(() => box.classList.remove("show"), 3500);
+        }
+
+        // ── MODAL ──
+        function confirmReset() {
+            document.getElementById("modalTitle").textContent = "Reset all votes?";
+            document.getElementById("modalDesc").textContent = "This will permanently delete all recorded votes and reset every voter's status. This cannot be undone.";
+            document.getElementById("modalConfirmBtn").onclick = resetVotes;
+            document.getElementById("confirmModal").classList.add("show");
+        }
+
+        function confirmDeleteVoter(id, name) {
+            document.getElementById("modalTitle").textContent = `Delete ${name}?`;
+            document.getElementById("modalDesc").textContent = "This voter and their vote (if cast) will be permanently removed.";
+            document.getElementById("modalConfirmBtn").onclick = () => deleteVoter(id);
+            document.getElementById("confirmModal").classList.add("show");
+        }
+
+        function closeModal() {
+            document.getElementById("confirmModal").classList.remove("show");
+        }
+
+        // ── LOAD STATS ──
+        async function loadStats() {
+            try {
+                const res = await fetch("/admin/stats", { headers });
+                if (res.status === 401) { adminLogout(); return; }
+                const data = await res.json();
+
+                document.getElementById("statRegistered").textContent = data.registeredVoters;
+                document.getElementById("statVoted").textContent = data.votedVoters;
+                document.getElementById("statNotVoted").textContent = data.notVotedVoters;
+                document.getElementById("statTurnout").textContent = data.turnout + "%";
+                document.getElementById("iniVotes").textContent = data.Ini;
+                document.getElementById("tinubuVotes").textContent = data.Tinubu;
+
+                const total = data.Ini + data.Tinubu;
+                document.getElementById("progressIni").style.width = total ? `${Math.round((data.Ini / total) * 100)}%` : "50%";
+                document.getElementById("progressTinubu").style.width = total ? `${Math.round((data.Tinubu / total) * 100)}%` : "50%";
+
+                currentElectionOpen = data.electionOpen;
+                updateElectionUI(currentElectionOpen);
+            } catch (err) {
+                console.error("Stats error:", err);
+            }
+        }
+
+        // ── LOAD VOTERS ──
+        async function loadVoters() {
+            try {
+                const res = await fetch("/admin/voters", { headers });
+                if (res.status === 401) { adminLogout(); return; }
+                const data = await res.json();
+                allVoters = data.voters || [];
+                renderTable(allVoters);
+            } catch (err) {
+                console.error("Voters error:", err);
+            }
+        }
+
+        function renderTable(voters) {
+            const tbody = document.getElementById("votersTableBody");
+
+            if (!voters.length) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:2rem;">No voters found.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = voters.map((v, i) => `
+                <tr>
+                    <td style="color:var(--text-muted);">${i + 1}</td>
+                    <td><strong>${v.firstName} ${v.lastName}</strong></td>
+                    <td style="color:var(--text-muted);">${v.email}</td>
+                    <td style="font-family:'Syne',sans-serif; font-size:0.8rem;">${v.voterId}</td>
+                    <td style="color:var(--text-muted);">${v.nationalId}</td>
+                    <td><span class="${v.hasVoted ? 'voted-yes' : 'voted-no'}">${v.hasVoted ? '✓ Voted' : 'Not yet'}</span></td>
+                    <td><button class="btn-delete-voter" onclick="confirmDeleteVoter('${v._id}', '${v.firstName} ${v.lastName}')">Delete</button></td>
+                </tr>
+            `).join("");
+        }
+
+        function filterTable(query) {
+            const q = query.toLowerCase();
+            const filtered = allVoters.filter(v =>
+                `${v.firstName} ${v.lastName}`.toLowerCase().includes(q) ||
+                v.email.toLowerCase().includes(q) ||
+                v.voterId.toLowerCase().includes(q) ||
+                String(v.nationalId).includes(q)
+            );
+            renderTable(filtered);
+        }
+
+        // ── TOGGLE ELECTION ──
+        function updateElectionUI(isOpen) {
+            const badge = document.getElementById("electionStatusBadge");
+            const text = document.getElementById("electionStatusText");
+            const btn = document.getElementById("toggleElectionBtn");
+
+            if (isOpen) {
+                badge.textContent = "Open";
+                badge.className = "status-open";
+                text.textContent = "Voters can currently submit ballots.";
+                btn.textContent = "Close Election";
+                btn.className = "btn-toggle-close";
+            } else {
+                badge.textContent = "Closed";
+                badge.className = "status-closed";
+                text.textContent = "Voting is suspended. No new ballots accepted.";
+                btn.textContent = "Open Election";
+                btn.className = "btn-toggle-open";
+            }
+        }
+
+        async function toggleElection() {
+            try {
+                const res = await fetch("/admin/election/toggle", { method: "PUT", headers });
+                const data = await res.json();
+                currentElectionOpen = data.electionOpen;
+                updateElectionUI(currentElectionOpen);
+                showToast(data.message);
+            } catch (err) {
+                showToast("Failed to toggle election.", true);
+            }
+        }
+
+        // ── RESET VOTES ──
+        async function resetVotes() {
+            closeModal();
+            try {
+                const res = await fetch("/admin/votes/reset", { method: "DELETE", headers });
+                const data = await res.json();
+                showToast(data.message || "Votes reset successfully.");
+                await loadStats();
+                await loadVoters();
+            } catch (err) {
+                showToast("Reset failed.", true);
+            }
+        }
+
+        // ── DELETE VOTER ──
+        async function deleteVoter(id) {
+            closeModal();
+            try {
+                const res = await fetch(`/admin/voters/${id}`, { method: "DELETE", headers });
+                const data = await res.json();
+                if (!res.ok) { showToast(data.error, true); return; }
+                showToast(data.message);
+                await loadStats();
+                await loadVoters();
+            } catch (err) {
+                showToast("Delete failed.", true);
+            }
+        }
+
+        // ── EXPORT CSV ──
+        function exportCSV(e) {
+            e.preventDefault();
+            const url = "/admin/export/csv";
+            const a = document.createElement("a");
+            a.href = url;
+            a.setAttribute("download", "evote-voters.csv");
+            // Pass token via query param since we can't set headers on anchor download
+            fetch(url, { headers })
+                .then(res => res.blob())
+                .then(blob => {
+                    const objectUrl = URL.createObjectURL(blob);
+                    a.href = objectUrl;
+                    a.click();
+                    URL.revokeObjectURL(objectUrl);
+                })
+                .catch(() => showToast("Export failed.", true));
+        }
+
+        // ── LOGOUT ──
+        function adminLogout() {
+            localStorage.removeItem("adminToken");
+            window.location.href = "/admin-login.html";
+        }
+
+        // ── INIT ──
+        (async () => {
+            await loadStats();
+            await loadVoters();
+            // Refresh stats every 60s
+            setInterval(loadStats, 60000);
+        })();
+    </script>
+</body>
+
+</html>

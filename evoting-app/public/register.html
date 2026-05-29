@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register | National E-Voting Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+    <!-- ── NAVBAR (structure untouched, styled via CSS) ── -->
+    <nav class="navbar-custom">
+        <div class="container d-flex align-items-center justify-content-between">
+            <a class="brand d-flex align-items-center" href="/">
+                <span class="brand-mark">E</span>-Vote
+            </a>
+
+            <div class="nav-links d-none d-md-flex align-items-center gap-4">
+                <a href="/how-to-vote.html">How to Vote</a>
+                <a href="/about.html">About Us</a>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+                <a id="dashboardButton" class="btn btn-sm rounded-pill px-3 d-none" href="/dashboard"
+                    style="border:1px solid var(--green-mid); color:var(--green-mid); text-decoration:none;">Dashboard</a>
+                <a id="loginButton" class="btn-nav-login" href="/login.html">Login</a>
+                <a id="registerButton" class="btn btn-sm px-3" href="/register.html"
+                    style="border:2px solid var(--green-deep); border-radius: 10px; color:var(--green-deep); font-family:'Syne',sans-serif; font-weight:700; background:#D1EED8; text-decoration:none;">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── PAGE BODY ── -->
+    <div class="register-page">
+        <div class="container">
+            <div class="row align-items-center g-5">
+
+                <!-- LEFT: FORM -->
+                <div class="col-lg-5">
+                    <div class="form-panel">
+
+                        <h1 class="form-heading fade-up delay-1">Registration<br />Form</h1>
+                        <p class="form-subtext fade-up delay-2">
+                            Register to join the leading decentralized E-voting Platform.
+                            Register your voice where it matters to you!
+                        </p>
+
+                        <form id="registerForm" class="register-form">
+
+                            <div class="mb-3 fade-up delay-3">
+                                <div class="row g-2">
+                                    <div class="col">
+                                        <label class="form-label" for="firstName">First Name</label>
+                                        <input id="firstName" type="text" class="form-control" placeholder="First name"
+                                            required />
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label" for="lastName">Last Name</label>
+                                        <input id="lastName" type="text" class="form-control" placeholder="Last name"
+                                            required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 fade-up delay-4">
+                                <label class="form-label" for="dob">Date Of Birth</label>
+                                <input id="dob" type="date" class="form-control" required />
+                            </div>
+
+                            <div class="mb-3 fade-up delay-5">
+                                <label class="form-label" for="email">Email Address</label>
+                                <input id="email" type="email" class="form-control" placeholder="you@example.com"
+                                    required />
+                            </div>
+
+                            <div class="mb-3 fade-up delay-5">
+                                <label class="form-label" for="nationalId">National ID</label>
+                                <input id="nationalId" type="text" inputmode="numeric" pattern="\d{10}" minlength="10"
+                                    maxlength="10" class="form-control" placeholder="10 digits" required />
+                            </div>
+
+                            <div class="mb-3 fade-up delay-6">
+                                <label class="form-label" for="password">Password</label>
+                                <input id="password" type="password" class="form-control"
+                                    placeholder="Min. 8 characters" required />
+                            </div>
+
+                            <div class="mb-3 fade-up delay-7">
+                                <label class="form-label" for="confirmPassword">Confirm Password</label>
+                                <input id="confirmPassword" type="password" minlength="8"
+                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$"
+                                    title="Must include uppercase, lowercase, and a number" class="form-control"
+                                    placeholder="Repeat password" required />
+                            </div>
+
+                            <div class="fade-up delay-8">
+                                <button type="submit" class="btn-submit">SUBMIT</button>
+                            </div>
+
+                            <p id="registerMessage" class="mt-3 text-center"></p>
+                        </form>
+
+                        <div class="signin-link fade-up delay-8">
+                            Already registered? <a href="login.html">Sign in</a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- RIGHT: ILLUSTRATION -->
+                <div class="col-lg-7 d-none d-lg-flex illustration-panel">
+                    <div class="scene w-100" style="position:relative; height:420px;">
+
+                        <!-- Ballot / candidate board -->
+                        <div class="ballot-board"
+                            style="top:20px; right:60px; animation: fadeUp 0.7s 0.4s forwards; opacity:0;">
+                            <div class="ballot-candidate">
+                                <div class="candidate-avatar">👤</div>
+                                <div class="candidate-lines">
+                                    <div class="candidate-line long"></div>
+                                    <div class="candidate-line short"></div>
+                                </div>
+                                <div class="candidate-check"></div>
+                            </div>
+                            <div class="ballot-candidate">
+                                <div class="candidate-avatar">👩</div>
+                                <div class="candidate-lines">
+                                    <div class="candidate-line long"></div>
+                                    <div class="candidate-line short"></div>
+                                </div>
+                                <div class="candidate-check checked">✓</div>
+                            </div>
+                            <div class="ballot-candidate">
+                                <div class="candidate-avatar">🧑</div>
+                                <div class="candidate-lines">
+                                    <div class="candidate-line long"></div>
+                                    <div class="candidate-line short"></div>
+                                </div>
+                                <div class="candidate-check"></div>
+                            </div>
+                        </div>
+
+                        <!-- Voting booth + people at bottom -->
+                        <div
+                            style="position:absolute; bottom:0; left:0; right:0; display:flex; align-items:flex-end; gap:2rem; padding: 0 40px; animation: fadeUp 0.7s 0.55s forwards; opacity:0;">
+
+                            <!-- Person 1 — casting ballot -->
+                            <div class="person p1">
+                                <div class="person-head"></div>
+                                <div class="person-body"></div>
+                                <div class="person-legs">
+                                    <div class="person-leg"></div>
+                                    <div class="person-leg"></div>
+                                </div>
+                            </div>
+
+                            <!-- Vote box -->
+                            <div style="margin-bottom:28px;">
+                                <div class="vote-box">
+                                    <span class="vote-box-label">VOTE</span>
+                                    <div class="vote-box-slot"></div>
+                                    <div class="vote-box-body"></div>
+                                </div>
+                            </div>
+
+                            <!-- Person 2 -->
+                            <div class="person p2" style="margin-left:1rem;">
+                                <div class="person-head"></div>
+                                <div class="person-body"></div>
+                                <div class="person-legs">
+                                    <div class="person-leg"></div>
+                                    <div class="person-leg"></div>
+                                </div>
+                            </div>
+
+                            <!-- Spacer pushes person 3 right -->
+                            <div style="flex:1;"></div>
+
+                            <!-- Person 3 — with megaphone feel -->
+                            <div class="person p3">
+                                <div class="person-head"></div>
+                                <div class="person-body"></div>
+                                <div class="person-legs">
+                                    <div class="person-leg"></div>
+                                    <div class="person-leg"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ground -->
+                        <div class="ground" style="position:absolute; bottom:0; left:0; right:0;"></div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="register.js"></script>
+
+</body>
+
+</html>
