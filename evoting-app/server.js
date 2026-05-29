@@ -51,7 +51,7 @@ mongoose
     .connect(process.env.MONGO_URI)
     .then(() => {
         console.log("Connected to MongoDB");
-        app.listen(3000, () => console.log("Server running on port 3000"));
+        app.listen(process.env.PORT || 3000, () => console.log("Server running"));
     })
     .catch((err) => {
         console.error("MongoDB connection error:", err);
@@ -116,6 +116,35 @@ app.post("/login", async (req, res) => {
             hasVoted: user.hasVoted,
         },
     });
+});
+
+// ── FORGOT PASSWORD ──
+app.post("/forgot-password", async (req, res) => {
+    try {
+        const { email, nationalId, password } = req.body;
+
+        if (!email || !nationalId || !password) {
+            return res.status(400).json({ error: "Email, National ID, and new password are required." });
+        }
+
+        if (!/^[0-9]{10}$/.test(String(nationalId))) {
+            return res.status(400).json({ error: "National ID must be exactly 10 digits." });
+        }
+
+        const user = await User.findOne({ email, nationalId });
+        if (!user) {
+            return res.status(404).json({ error: "No account found matching that email and national ID." });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        user.password = hashedPassword;
+        await user.save();
+
+        res.json({ message: "Password reset successful" });
+    } catch (err) {
+        console.error("FORGOT PASSWORD ERROR:", err);
+        res.status(500).json({ error: "Unable to reset password. Please try again." });
+    }
 });
 
 // ── VOTE ──

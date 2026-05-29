@@ -41,22 +41,14 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-    const message = document.getElementById("loginMessage");
 
     const data = await loginService.login(email, password);
 
     if (data.error) {
-        message.textContent = data.error;
-        message.className = "mt-3 text-center text-danger";
-        return;
+        return alerts.error(data.error);
     }
 
     localStorage.setItem("loggedInUser", JSON.stringify(data.user));
-
-    message.textContent = "Login successful. Redirecting...";
-    message.className = "mt-3 text-center text-success";
-
-    setTimeout(() => {
-        window.location.href = "/dashboard";
-    }, 1000);
+    await alerts.success("Login successful. Redirecting...");
+    window.location.href = "/dashboard";
 });

@@ -76,22 +76,17 @@ const system = new VotingSystem("http://localhost:3000");
 // ── VOTE ACTION ──
 async function vote(candidate) {
     const voterId = document.getElementById("voterId").value.trim();
-    const messageBox = document.getElementById("message");
 
     const result = await system.vote(voterId, candidate);
 
-    messageBox.textContent = result.message;
-    messageBox.classList.remove("d-none", "alert-danger", "alert-success");
-
     if (result.success) {
-        messageBox.classList.add("alert-success");
-        // voter just voted — stop polling, one final refresh is enough
+        await alerts.success(result.message || "Vote submitted successfully.");
         stopPolling();
         await loadResults();
         disableVotingUI("You have successfully cast your vote.");
     } else {
-        messageBox.classList.add("alert-danger");
-        // if already voted error comes back, stop polling too
+        await alerts.error(result.message || "Vote failed.");
+
         if (result.message?.toLowerCase().includes("already")) {
             stopPolling();
             await loadResults();
