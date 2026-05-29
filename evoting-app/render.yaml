@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: e-voting-app
+    name: e-voting-system
     runtime: node
     rootDir: .
     buildCommand: npm install
